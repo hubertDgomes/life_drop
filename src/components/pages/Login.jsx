@@ -17,7 +17,7 @@ const Login = () => {
     setDisabled(true)
     try {
       const res = await handleLogin({ email, password })
-      console.log(res);
+      // console.log(res);
       
       navigate(`/db`)
     }

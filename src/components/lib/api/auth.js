@@ -47,4 +47,17 @@ export const getMe = async () => {
     }
 };
 
-export default { signup, login, logout, getMe };
+export const editAvailable = async ({is_available}) => {
+    try {
+        const res = await api.patch("/api/editme", {is_available})
+        return res.data;
+    }
+    catch (err) {
+        console.error(err.message);
+        throw err;
+    }
+}
+
+
+
+export default { signup, login, logout, getMe , editAvailable};

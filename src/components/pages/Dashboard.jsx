@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import useAuth from '../hooks/useAuth'
 import '../../App.css'
+import axios from 'axios'
+
 
 const formatDate = (value) => {
   if (!value) return 'Not yet'
@@ -19,6 +21,8 @@ const Dashboard = () => {
   const { user, loading } = useAuth()
   const allData = user?.user || user?.data || user
   const [photoUnavailable, setPhotoUnavailable] = useState(false)
+
+  const {changeAvailable} = useAuth()
 
   if (loading) {
     return (
@@ -58,7 +62,18 @@ const Dashboard = () => {
     .join('')
     .toUpperCase()
   const bloodGroup = allData.blood_group || allData.blood || 'Not set'
-  const isAvailable = allData.is_available === true
+  const isAvailable = allData.is_available  
+
+  const toggleAvailabel = async () => {
+    try {
+      await changeAvailable(!isAvailable)
+    }
+    catch (err) {
+      console.log(err || err.message);
+    }
+  }
+
+
 
   return (
     <main className="relative isolate min-h-[calc(100vh-4rem)] overflow-hidden bg-[#fff9f8] px-4 py-10 sm:px-6 lg:py-14">
@@ -78,9 +93,9 @@ const Dashboard = () => {
           </div>
           <div className="flex items-center gap-2 rounded-full border border-white/90 bg-white/80 px-4 py-2.5 shadow-sm backdrop-blur">
             <span className={`size-2.5 rounded-full ${isAvailable ? 'bg-emerald-500' : 'bg-slate-300'}`} />
-            <span className="text-sm font-semibold text-slate-700">
+            <button onClick={toggleAvailabel} className="text-sm font-semibold text-slate-700">
               {isAvailable ? 'Available to donate' : 'Currently unavailable'}
-            </span>
+            </button>
           </div>
         </header>
 

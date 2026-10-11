@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { AuthContext } from "../context/AuthContext"
-import { getMe, login, logout, signup } from "../lib/api/auth"
+import { editAvailable, getMe, login, logout, signup } from "../lib/api/auth"
 
 const useAuth = () => {
     const context = useContext(AuthContext)
@@ -75,8 +75,28 @@ const useAuth = () => {
         }
     }
 
+    const changeAvailable = async (is_available) => {
+        setLoading(true)
+        try {
+            // 1. save the change on the server
+            await editAvailable({ is_available })
+
+            // 2. get the fresh user from the server and put it in state
+            const res = await getMe()
+            const userData = res.data || res.user || res
+            setUser(userData)
+            return userData
+        }
+        catch {
+            return null
+        }
+        finally {
+            setLoading(false)
+        }
+    }
+
     return {
-        user, setUser, loading, setLoading, handleLogin, handleLogout, handleSignup, checkUser
+        user, setUser, loading, setLoading, handleLogin, handleLogout, handleSignup, checkUser, changeAvailable
     }
 
 }
