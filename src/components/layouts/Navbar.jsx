@@ -40,9 +40,7 @@ const Navbar = () => {
                 </div>
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">
-                        <li><a>Home</a></li>
-                        <li><a>Find Donors</a></li>
-                        <li><a>About</a></li>
+                        <li><Link to={"/profile"}>About Me</Link></li>
                     </ul>
                 </div>
                 <div className="navbar-end gap-4">

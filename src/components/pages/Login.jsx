@@ -18,8 +18,7 @@ const Login = () => {
     try {
       const res = await handleLogin({ email, password })
       // console.log(res);
-      
-      navigate(`/db`)
+      navigate(`/profile`)
     }
     catch (err) {
       const message = err.response?.data?.message || 'Login failed'
