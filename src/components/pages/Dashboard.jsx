@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import useAuth from '../hooks/useAuth'
 import '../../App.css'
-import axios from 'axios'
-import { editLastDonate } from '../lib/api/auth'
 
 
 const formatDate = (value) => {
@@ -24,7 +22,10 @@ const Dashboard = () => {
   const [photoUnavailable, setPhotoUnavailable] = useState(false)
   const [showDate, setShowDate] = useState(false)
   const [newDate , setNewDate] = useState("")
-  const { changeAvailable, changeDate } = useAuth()
+  const [showNoteEditor, setShowNoteEditor] = useState(false)
+  const [healthNotes, setHealthNotes] = useState('')
+  const [noteError, setNoteError] = useState('')
+  const { changeAvailable, changeDate, changeNote } = useAuth()
 
   if (loading) {
     return (
@@ -85,6 +86,16 @@ const Dashboard = () => {
     }
     catch(err){
       console.error(err.response?.data?.message || err.message)
+    }
+  }
+
+  const handleChangeNote = async () => {
+    try {
+      setNoteError('')
+      await changeNote(healthNotes)
+      setShowNoteEditor(false)
+    } catch (err) {
+      setNoteError(err.response?.data?.message || err.message || 'Could not update health notes.')
     }
   }
 
@@ -207,10 +218,57 @@ const Dashboard = () => {
             </svg>
           </span>
           <div>
-            <h2 className="font-bold text-slate-900">Your health notes</h2>
-            <p className="mt-1 text-sm leading-6 text-slate-500">
-              {allData.health_notes || 'No health notes have been added to your donor profile.'}
-            </p>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h2 className="font-bold text-slate-900">Your health notes</h2>
+              {!showNoteEditor && (
+                <button
+                  className="text-sm font-semibold text-rose-600 hover:text-rose-700"
+                  onClick={() => {
+                    setHealthNotes(allData.health_notes || '')
+                    setNoteError('')
+                    setShowNoteEditor(true)
+                  }}
+                  type="button"
+                >
+                  Edit
+                </button>
+              )}
+            </div>
+            {showNoteEditor ? (
+              <div className="mt-3 space-y-3">
+                <textarea
+                  aria-label="Health notes"
+                  className="w-full rounded-lg border border-rose-200 p-3 text-sm text-slate-700 focus:border-rose-400 focus:outline-none"
+                  onChange={(e) => setHealthNotes(e.target.value)}
+                  rows={4}
+                  value={healthNotes}
+                />
+                {noteError && <p className="text-sm text-red-600" role="alert">{noteError}</p>}
+                <div className="flex gap-3">
+                  <button
+                    className="rounded-lg bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-700"
+                    onClick={handleChangeNote}
+                    type="button"
+                  >
+                    Save notes
+                  </button>
+                  <button
+                    className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+                    onClick={() => {
+                      setNoteError('')
+                      setShowNoteEditor(false)
+                    }}
+                    type="button"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <p className="mt-1 text-sm leading-6 text-slate-500">
+                {allData.health_notes || 'No health notes have been added to your donor profile.'}
+              </p>
+            )}
           </div>
         </section>
       </div>
