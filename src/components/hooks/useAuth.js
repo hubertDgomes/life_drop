@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { AuthContext } from "../context/AuthContext"
-import { editAvailable, getMe, login, logout, signup } from "../lib/api/auth"
+import { editAvailable, editLastDonate, editNote, getMe, login, logout, signup } from "../lib/api/auth"
 
 const useAuth = () => {
     const context = useContext(AuthContext)
@@ -95,8 +95,43 @@ const useAuth = () => {
         }
     }
 
+
+    const changeDate = async (last_donation_date) => {
+        setLoading(true)
+        try {
+            // 1. save the change on the server
+            await editLastDonate({ last_donation_date })
+
+            // 2. get the fresh user from the server and put it in state
+            const res = await getMe()
+            const userData = res.data || res.user || res
+            setUser(userData)
+            return userData
+        }
+        finally {
+            setLoading(false)
+        }
+    }
+
+    const changeNote = async (health_notes) => {
+        setLoading(true)
+        try {
+            // 1. save the change on the server
+            await editNote({ health_notes })
+
+            // 2. get the fresh user from the server and put it in state
+            const res = await getMe()
+            const userData = res.data || res.user || res
+            setUser(userData)
+            return userData
+        }
+        finally {
+            setLoading(false)
+        }
+    }
+
     return {
-        user, setUser, loading, setLoading, handleLogin, handleLogout, handleSignup, checkUser, changeAvailable
+        user, setUser, loading, setLoading, handleLogin, handleLogout, handleSignup, checkUser, changeAvailable,changeDate,changeNote
     }
 
 }

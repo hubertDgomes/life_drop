@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, Links } from "react-router-dom"
 import useAuth from "../hooks/useAuth"
 
 const steps = [
@@ -49,7 +49,7 @@ const Hero = ({ isAuthenticated }) => (
           When every moment matters, finding the right person should feel simple. Meet your local donor community with Life Drop.
         </p>
         <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-          <Link className="group inline-flex items-center justify-center gap-3 rounded-full bg-rose-600 px-7 py-4 text-sm font-semibold text-white shadow-lg shadow-rose-950/30 transition duration-300 hover:-translate-y-1 hover:bg-rose-500" to="/donors">
+          <Link className="group inline-flex items-center justify-center gap-3 rounded-full bg-rose-600 px-7 py-4 text-sm font-semibold text-white shadow-lg shadow-rose-950/30 transition duration-300 hover:-translate-y-1 hover:bg-rose-500" to="/donor">
             Find a donor <span className="transition-transform group-hover:translate-x-1">→</span>
           </Link>
           <Link className="inline-flex items-center justify-center rounded-full border border-white/25 px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:-translate-y-1 hover:border-white/60 hover:bg-white/10" to={isAuthenticated ? "/profile" : "/signup"}>

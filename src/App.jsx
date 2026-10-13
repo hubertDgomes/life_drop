@@ -6,6 +6,7 @@ import Home from './components/pages/Home'
 import Signup from './components/pages/Signup'
 import Login from './components/pages/Login'
 import Dashboard from './components/pages/Dashboard'
+import Donor from './components/pages/Donor'
 
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
           <Route path='/signup' element={<Signup/>}/>
           <Route path='/login' element={<Login  />}/>
           <Route path='/profile' element={<Dashboard/>}/>
+          <Route path='/donor' element={<Donor/>}/>
         </Route>
       </Routes>
     </div>

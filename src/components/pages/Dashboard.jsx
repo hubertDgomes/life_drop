@@ -2,6 +2,7 @@ import { useState } from 'react'
 import useAuth from '../hooks/useAuth'
 import '../../App.css'
 import axios from 'axios'
+import { editLastDonate } from '../lib/api/auth'
 
 
 const formatDate = (value) => {
@@ -21,8 +22,9 @@ const Dashboard = () => {
   const { user, loading } = useAuth()
   const allData = user?.user || user?.data || user
   const [photoUnavailable, setPhotoUnavailable] = useState(false)
-
-  const {changeAvailable} = useAuth()
+  const [showDate, setShowDate] = useState(false)
+  const [newDate , setNewDate] = useState("")
+  const { changeAvailable, changeDate } = useAuth()
 
   if (loading) {
     return (
@@ -62,7 +64,7 @@ const Dashboard = () => {
     .join('')
     .toUpperCase()
   const bloodGroup = allData.blood_group || allData.blood || 'Not set'
-  const isAvailable = allData.is_available  
+  const isAvailable = allData.is_available
 
   const toggleAvailabel = async () => {
     try {
@@ -70,6 +72,19 @@ const Dashboard = () => {
     }
     catch (err) {
       console.log(err || err.message);
+    }
+  }
+
+  
+
+  const handleChangeDate = async () => {
+    try{
+      const res = await changeDate(newDate)
+      console.log(res)
+      console.log(newDate)
+    }
+    catch(err){
+      console.error(err.response?.data?.message || err.message)
     }
   }
 
@@ -169,7 +184,12 @@ const Dashboard = () => {
                 <dd>{allData.location || 'Not provided'}</dd>
               </div>
               <div className="dashboard-detail-card">
-                <dt>Last donation</dt>
+                <div className="flex items-center justify-between">
+                  <dt>Last donation</dt>
+                  <button onClick={()=> setShowDate(!showDate)}>Change</button>
+                </div>
+                {showDate && <input onChange={(e)=> setNewDate(e.target.value)} type="date" className='p-2 rounded-[6px] border' /> }
+                {showDate && <button onClick={handleChangeDate}>Change The date</button> }
                 <dd>{formatDate(allData.last_donation_date)}</dd>
               </div>
               <div className="dashboard-detail-card">

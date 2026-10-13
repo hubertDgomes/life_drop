@@ -58,6 +58,29 @@ export const editAvailable = async ({is_available}) => {
     }
 }
 
+export const editLastDonate = async({last_donation_date}) => {
+    try{
+        const res = await api.patch("/api/editme" , {last_donation_date})
+        return res.data
+    }
+    catch(err){
+        console.error(err.message)
+        throw err;
+    }
+}
+
+export const editNote = async({health_notes}) => {
+    try{
+        const res = await api.patch("/api/editme" , {health_notes})
+        return res.data
+    }
+    catch(err){
+        console.error(err.message)
+        throw err;
+    }
+}
 
 
-export default { signup, login, logout, getMe , editAvailable};
+
+
+export default { signup, login, logout, getMe , editAvailable,editLastDonate,editNote};
